@@ -5,8 +5,8 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" href="https://bootswatch.com/5/morph/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
-    {% block head %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    {% block content %}
         <title>{% block title %}{% endblock %}</title>
         {% load bootstrap5 %}
         {% bootstrap_css %}

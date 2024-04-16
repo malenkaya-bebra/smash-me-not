@@ -1,5 +1,8 @@
 from django.shortcuts import render, redirect
-from .forms import LoginForm, RegisterForm
+from django.urls import reverse
+from .models import Profile
+from .forms import LoginForm, RegisterForm, ProfileForm
+from django.http import HttpResponseRedirect
 from django.contrib.auth.models import auth
 from django.contrib.auth import login
 # from django.contrib.auth.decorators import login_required
@@ -36,6 +39,8 @@ def register_view(request):
         form = RegisterForm(request.POST)
         if form.is_valid():
             user = form.save()
+            profile = Profile(user_id=user.id)
+            profile.save()
             auth_data = auth.authenticate(request, email=user.email, password=form.data.get('password'))
             if auth_data is not None:
                 login(request, auth_data)
@@ -48,9 +53,44 @@ def logout_view(request):
     auth.logout(request)
     return redirect('/auth/login')
 
+
+def profile_edit(request):
+    if request.user.is_authenticated:
+        try:
+            profile = Profile.objects.get(user=request.user)
+        except Profile.DoesNotExist:
+            profile = Profile.objects.create(user=request.user)
+
+        if request.method == 'GET':
+            form = ProfileForm(instance=profile)
+            return render(request, 'user/settings.html', {'form': form})
+
+        if request.method == 'POST':
+            form = ProfileForm(request.POST, request.FILES, instance=profile)
+            if form.is_valid():
+                profile.bio = form.cleaned_data['bio']
+                if 'avatar' in request.FILES:
+                    profile.avatar = request.FILES['avatar']
+                    print('Avatar uploaded:', profile.avatar)
+
+                if 'photos' in request.FILES:
+                    photos = request.FILES.getlist('photos')[:6]
+                    for i, photo in enumerate(photos):
+                        setattr(profile, f'photo_{i+1}', photo)
+                profile.save()
+                return HttpResponseRedirect(reverse('auth:profile'))
+    else:
+        return redirect('login')
+
+
+
 def profile_view(request):
     if request.user.is_authenticated:
-        if request.method == 'GET':
-            return render(request, 'user/settings.html')
-        else:
-            return redirect('/auth/login/')
+        try:
+            profile = Profile.objects.get(user=request.user)
+        except Profile.DoesNotExist:
+            profile = Profile.objects.create(user=request.user)
+
+        return render(request, 'user/profile.html', {'profile': profile})
+    else:
+        return redirect('login')

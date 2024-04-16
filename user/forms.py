@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
+from .models import Profile, Photo
 
 
 class LoginForm(forms.Form):
@@ -38,3 +39,16 @@ class RegisterForm(forms.ModelForm):
         if commit:
             user.save()
         return user
+
+
+class ProfileForm(forms.ModelForm):
+    avatar = forms.ImageField(required=False)
+    photos = forms.FileField(widget=forms.ClearableFileInput(), required=False)
+
+    class Meta:
+        model = Profile
+        fields = ['bio']
+        widgets = {
+            'bio': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter your bio'}),
+        }
+
