@@ -83,7 +83,6 @@ def profile_edit(request):
         return redirect('login')
 
 
-
 def profile_view(request):
     if request.user.is_authenticated:
         try:
