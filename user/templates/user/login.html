@@ -12,6 +12,7 @@
                             {% csrf_token %}
                             <fieldset class="form-group">
                                 <br/>
+                                {{ form|crispy }}
                             </fieldset>
                             <div class="form-group">
                                 <button
@@ -24,14 +25,14 @@
                                 <br/><br/>
                                 <a
                                         class="btn btn-lg btn-warning btn-block text-uppercase"
-                                        href="#"
+                                        href="{% url 'auth:password_reset' %}"
                                 >Forgot Password?</a
                                 >
                             </div>
                             <small
                             ><p class="text-center">
                                 Not registered yet!
-                                <a href="#"><b>Register Now!</b></a>
+                                <a href="{% url 'auth:register' %}"><b>Register Now!</b></a>
                             </p></small
                             >
                         </form>

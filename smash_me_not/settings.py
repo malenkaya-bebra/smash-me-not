@@ -29,6 +29,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "user",
+    "core",
     "daphne",
 
     "django.contrib.admin",
@@ -39,11 +41,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
 
     "crispy_forms",
+    "crispy_bootstrap5",
     "bootstrap5",
-    "user",
-    "core",
-
-
 ]
 
 MIDDLEWARE = [
@@ -145,8 +144,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = os.environ.get('jangir.kapin@gmail.com')
-EMAIL_HOST_PASSWORD = os.environ.get('zlpmtoyefixnxiaw')
+EMAIL_HOST_USER = 'jangir.kapin@gmail.com'
+EMAIL_HOST_PASSWORD = 'zlpmtoyefixnxiaw'
 
 CHANNEL_LAYERS = {
     'default': {
