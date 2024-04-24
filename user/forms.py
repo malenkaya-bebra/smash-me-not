@@ -15,9 +15,14 @@ class RegisterForm(forms.ModelForm):
                                       widget=forms.PasswordInput(attrs={'class': 'form-control', 'type': 'password',
                                                                         'placeholder': 'Repeat your password'}))
 
+    telegram = forms.CharField(required=True, max_length=255,
+                               widget=forms.TextInput(
+                                   attrs={'class': 'form-control', 'placeholder': 'Enter your Telegram'}))
+
     class Meta:
         model = User
-        fields = ['email', 'username', 'first_name', 'last_name', 'password']
+        fields = ['email', 'username', 'first_name', 'last_name', 'telegram', 'password']
+
         widgets = {
             'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Enter your email'}),
             'username': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter your username'}),

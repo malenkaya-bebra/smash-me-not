@@ -13,17 +13,21 @@ class Notification(models.Model):
 
 class Feed(models.Model):
     CATEGORY_CHOICES = [
-        ('serious_relationship', 'Serious Relationship'),
-        ('one_night_stand', 'One Night Stand'),
-        ('friends_with_benefits', 'Friends with Benefits'),
-        ('online_chatting', 'Online Chatting'),
-        ('activities', 'Activities'),
+        ('Serious Relationship', 'Serious Relationship'),
+        ('One Night Stand', 'One Night Stand'),
+        ('Friends with Benefits', 'Friends with Benefits'),
+        ('Online Chatting', 'Online Chatting'),
+        ('Activities', 'Activities'),
     ]
 
     category = models.CharField(max_length=100, choices=CATEGORY_CHOICES)
 
     def __str__(self):
-        return self.CATEGORY_CHOICES[0][1]
+        return self.category
+
+
+    def __str__(self):
+        return self.category
 
 
 class Post(models.Model):

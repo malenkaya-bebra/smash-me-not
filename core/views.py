@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404, render, redirect
 from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
-from django.urls import reverse
+from django.urls import reverse_lazy
 from django.contrib import messages
 from django.core.paginator import Paginator
 from django.contrib.auth.models import User
@@ -80,8 +80,9 @@ def create_post(request):
 
 class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Post
-    fields = ['content']
+    fields = ['feed', 'description']
     template_name = 'core/create_post.html'
+    success_url = reverse_lazy('home')
 
     def form_valid(self, form):
         form.instance.user = self.request.user
