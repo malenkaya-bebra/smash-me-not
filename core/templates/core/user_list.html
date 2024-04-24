@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    <title>SMASH ME NOT!</title>
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                {% include 'header.html' %}
+            </div>
+        </div>
+    </div>
+    <div class="lead d-flex align-items-center justify-content-center mt-5">
+    <h2>
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>Username</th>
+                <th>Profile</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for user in users %}
+                <tr class="table-warning">
+                    <td>{{ user.username }}</td>
+                    <td><a href="{{ user.profile.get_absolute_url }}">View</a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </h2>
+    </div>
+{% endblock %}

@@ -1,33 +1,10 @@
 {% extends 'base.html' %}
 
 {% block head %}
-    <title>Добро пожаловать на наш сайт!</title>
+    <title>SMASH ME NOT!</title>
 {% endblock %}
 
 {% block content %}
-    {% block style %}
-        <style>
-            .fa-solid {
-                font-size: 26px;
-            }
-
-            .fa-solid[data-count]:after {
-                position: absolute;
-                right: 40%;
-                top: 1%;
-                content: attr(data-count);
-                font-size: 36%;
-                padding: .6em;
-                border-radius: 999px;
-                line-height: .75em;
-                color: white;
-                background: rgba(255, 0, 0, .85);
-                text-align: center;
-                min-width: 2em;
-                font-weight: bold;
-            }
-        </style>
-    {% endblock %}
     <div class="container-fluid">
         <div class="row">
             <div class="col-12">
@@ -38,75 +15,53 @@
 
     <div class="container">
         <header>
-            <h1>Добро пожаловать на наш сайт!</h1>
-            <p>Мы рады приветствовать вас на нашей платформе. Здесь вы найдете множество интересных возможностей, а
-                также продукты и услуги, которые помогут вам достичь ваших целей.</p>
+            <h1 class="mt-5">Hey there!</h1>
+            <p class="lead">Welcome to Smash me Not! <br>Totally free dating service. <br>
+                <mark>No rules</mark>
+                , no moderators. <br>Just pure fun.
+            </p>
         </header>
 
         <section>
             {% if not user.is_authenticated %}
-                <a href="{% url 'auth:login' %}" class="btn join">Войти</a>
+                <a href="{% url 'auth:login' %}" class="btn join">Sign In</a>
             {% endif %}
-            <a href="#" class="btn learn-more">Узнать больше</a>
-            <a href="#" class="btn start-shopping">Начать покупки</a>
+            <a href="#" class="btn start-shopping">Go to Feed</a>
+            <a href="#" class="btn learn-more">Learn More</a>
         </section>
+    </div>
+
+    <div class="container">
+        <header>
+            <h1 class="mt-5">Feed</h1>
+        </header>
+        <section>
+            <div class="row">
+                {% for post in posts %}
+                    <div class="col-md-4">
+                        <div class="card mb-3">
+                            <div class="card-header">
+                                <h3 class="card-title">{{ user.first_name }} wants some {{ post.feed }}</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="profile-avatar mb-2">
+                                    {% if profile.avatar %}
+                                        <img src="{{ profile.avatar.url }}" alt="Avatar">
+                                    {% else %}
+                                        <span style="display: flex; justify-content: center; align-items: center; width: 100%; height: 100%;">No Avatar</span>
+                                    {% endif %}
+                                </div>
+                                <p class="card-text">{{ post.description }}</p>
+                            </div>
+                            <div class="card-footer text-muted">
+                                {{ post.date_posted }}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </section>
+
     </div>
 {% endblock %}
 
-{% block js_script %}
-    <script>
-        // setup chat scoket
-        const notifyScoket = new WebSocket(
-            'ws://'
-            + window.location.host
-            + '/ws/notify/'
-        );
-
-        // on socket open
-        notifyScoket.onopen = function (e) {
-            console.log('Socket successfully connected.');
-        };
-
-        // on socket close
-        notifyScoket.onclose = function (e) {
-            console.log('Socket closed unexpectedly');
-        };
-
-        // on receiving message on group
-        notifyScoket.onmessage = function (e) {
-            const data = JSON.parse(e.data);
-            const message = data.message;
-            // Call the setMessage function to add the new li element
-            setMessage(message);
-
-        };
-
-        function setMessage(message) {
-            // Create a new li element
-            var newLi = document.createElement('li');
-
-            // Create a new anchor element
-            var newAnchor = document.createElement('a');
-            newAnchor.className = 'dropdown-item text-wrap';
-            newAnchor.href = '#';
-            newAnchor.textContent = message;
-
-            // Append the anchor element to the li element
-            newLi.appendChild(newAnchor);
-
-            // Get the ul element with the id "notify"
-            var ulElement = document.getElementById('notify');
-
-            // Append the new li element to the ul element
-            ulElement.appendChild(newLi);
-
-            // getting object of count
-            var count = document.getElementById('bellCount').getAttribute('data-count');
-            document.getElementById('bellCount').setAttribute('data-count', parseInt(count) + 1);
-            console.log("New value of data-count:", count);
-
-        }
-
-
-    </script>
-{% endblock %}

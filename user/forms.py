@@ -12,8 +12,8 @@ class LoginForm(forms.Form):
 
 class RegisterForm(forms.ModelForm):
     repeat_password = forms.CharField(required=True, min_length=8, max_length=20,
-                                      widget=forms.PasswordInput({'class': 'form-control', 'type': 'password',
-                                                                  'placeholder': 'Repeat your password'}))
+                                      widget=forms.PasswordInput(attrs={'class': 'form-control', 'type': 'password',
+                                                                        'placeholder': 'Repeat your password'}))
 
     class Meta:
         model = User
@@ -25,6 +25,11 @@ class RegisterForm(forms.ModelForm):
             'last_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter your last name'}),
             'password': forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Enter your password'}),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field_name in self.Meta.fields:
+            self.fields[field_name].required = True
 
     def clean_repeat_password(self):
         password1 = self.cleaned_data.get("password")
@@ -51,4 +56,3 @@ class ProfileForm(forms.ModelForm):
         widgets = {
             'bio': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter your bio'}),
         }
-

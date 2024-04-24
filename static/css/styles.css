@@ -8,8 +8,9 @@
     width: 100%;
     max-width: 100%;
     padding-right: 0;
-    padding-left: calc(var(--bs-gutter-x)* .5);
+    padding-left: calc(var(--bs-gutter-x) * .5);
     margin-top: var(--bs-gutter-y);
+}
 
 .image_input {
     width: 0;
@@ -39,7 +40,7 @@
 
 .preview-item, .photos-item {
     width: 100px;
-    height: 100px;
+    height: 300px;
     margin-right: 10px;
     margin-bottom: 10px;
     overflow: hidden;

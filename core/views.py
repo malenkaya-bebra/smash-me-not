@@ -93,6 +93,12 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
 
 @login_required
+def user_list(request):
+    users = User.objects.all()
+    return render(request, 'core/user_list.html', {'users': users})
+
+
+@login_required
 def post_delete(request, pk):
     post = get_object_or_404(Post, pk=pk)
     if request.user == post.user:

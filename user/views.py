@@ -5,26 +5,26 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth.models import auth
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
-
-# from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required
 
 
 def login_view(request):
     if request.method == 'GET':
         form = LoginForm()
         return render(request, 'user/login.html', {'form': form})
+
     if request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid():
-            user = auth.authenticate(username=form.data.get('username'), password=form.data.get('password'))
-            login(request, user)
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = auth.authenticate(username=username, password=password)
             if user is not None:
+                login(request, user)
                 return redirect('/')
             else:
-                form.add_error(field='username', error='Invalid password or login')
-                return render(request, 'user/login.html', {'form': form})
-        else:
-            return render(request, 'user/login.html', {'form': form})
+                form.add_error(field='username', error='Invalid username or password')
+        return render(request, 'user/login.html', {'form': form})
 
 
 def register_view(request):
@@ -77,7 +77,7 @@ def profile_edit(request):
                 profile.save()
                 return HttpResponseRedirect(reverse('auth:profile'))
     else:
-        return redirect('login')
+        return redirect('auth:login')
 
 
 def profile_view(request):
@@ -87,6 +87,15 @@ def profile_view(request):
         except Profile.DoesNotExist:
             profile = Profile.objects.create(user=request.user)
 
-        return render(request, 'user/profile.html', {'profile': profile})
+        photos = [getattr(profile, f'photo_{i}') for i in range(1, 7) if getattr(profile, f'photo_{i}')]
+
+        return render(request, 'user/profile.html', {'profile': profile, 'photos': photos})
     else:
-        return redirect('login')
+        return redirect('auth:login')
+
+
+def user_view(request, slug):
+    viewed_user = get_object_or_404(Profile, username=slug)
+    if request.user.is_authenticated and request.user == viewed_user:
+        return redirect('auth:profile')
+    return profile_view(request, slug)

@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from django.urls import reverse
 
+
 class Notification(models.Model):
     message = models.CharField(max_length=100)
 
@@ -22,7 +23,7 @@ class Feed(models.Model):
     category = models.CharField(max_length=100, choices=CATEGORY_CHOICES)
 
     def __str__(self):
-        return f"{self.user.username}'s Feed"
+        return self.CATEGORY_CHOICES[0][1]
 
 
 class Post(models.Model):
@@ -32,11 +33,8 @@ class Post(models.Model):
     date_posted = models.DateTimeField(default=timezone.now)
     tags = models.CharField(max_length=100, blank=True)
 
-    def __str__(self):
-        return f"Post by {self.feed.user.username} at {self.created_at}"
 
-
-class Comments(models.Model):
+class Comment(models.Model):
     post = models.ForeignKey(Post, related_name='details', on_delete=models.CASCADE)
     username = models.ForeignKey(User, related_name='details', on_delete=models.CASCADE)
     comment = models.CharField(max_length=255)

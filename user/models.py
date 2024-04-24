@@ -10,6 +10,7 @@ from autoslug import AutoSlugField
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(blank=True)
+    slug = AutoSlugField(populate_from='user', unique=True)
     avatar = models.ImageField(upload_to='avatars/', blank=True)
     photo_1 = models.ImageField(upload_to='photos/', blank=True)
     photo_2 = models.ImageField(upload_to='photos/', blank=True)
