@@ -13,4 +13,5 @@ urlpatterns = [
     path('search_posts/', views.search_posts, name='search_posts'),
     path('user_posts/<str:username>', UserPostListView.as_view(), name='user-posts'),
     path('user_list/', views.user_list, name='user-list'),
+    path('create_smash_request/', views.create_smash_request, name='create_smash_request'),
 ]

@@ -18,7 +18,7 @@ class PostListView(ListView):
     template_name = 'core/home.html'
     context_object_name = 'posts'
     ordering = ['-date_posted']
-    paginate_by = 10
+    paginate_by = 3
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -129,3 +129,23 @@ def like(request):
         Like.objects.create(user=request.user, post=post)
     resp = {'liked': liked}
     return JsonResponse(resp)
+
+
+@require_POST
+def create_smash_request(request):
+    post_id = request.POST.get('post_id')
+    receiver_id = request.POST.get('receiver_id')
+
+    if post_id and receiver_id:
+        try:
+            post = Post.objects.get(pk=post_id)
+            receiver = User.objects.get(pk=receiver_id)
+            sender = request.user
+
+            SmashRequest.objects.create(post=post, sender=sender, receiver=receiver)
+
+            return JsonResponse({'success': True})
+        except (Post.DoesNotExist, User.DoesNotExist):
+            return JsonResponse({'success': False, 'error': 'Invalid post_id or receiver_id'})
+
+    return JsonResponse({'success': False, 'error': 'post_id and receiver_id are required'})

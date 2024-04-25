@@ -3,13 +3,33 @@
     padding-right: 0 !important;
 }
 
-.row>* {
+.row > * {
     flex-shrink: 0;
-    width: 100%;
     max-width: 100%;
     padding-right: 0;
     padding-left: calc(var(--bs-gutter-x) * .5);
     margin-top: var(--bs-gutter-y);
+}
+
+.card-row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
+}
+
+.card-col {
+    flex: 0 0 33.333%;
+    max-width: 33.333%;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+
+@media (max-width: 767px) {
+    .card-col {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
 }
 
 .image_input {

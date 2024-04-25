@@ -13,18 +13,17 @@ class Notification(models.Model):
 
 class Feed(models.Model):
     CATEGORY_CHOICES = [
-        ('Serious Relationship', 'Serious Relationship'),
-        ('One Night Stand', 'One Night Stand'),
-        ('Friends with Benefits', 'Friends with Benefits'),
-        ('Online Chatting', 'Online Chatting'),
-        ('Activities', 'Activities'),
+        ('to have some serious relationship', 'Serious Relationship'),
+        ('to have... a one night stand, wow!', 'One Night Stand'),
+        ('to become friends with benefits', 'Friends with Benefits'),
+        ('simply online chatting', 'Online Chatting'),
+        ('some activities!', 'Activities')
     ]
 
     category = models.CharField(max_length=100, choices=CATEGORY_CHOICES)
 
     def __str__(self):
         return self.category
-
 
     def __str__(self):
         return self.category
@@ -57,7 +56,7 @@ class SmashRequest(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     sender = models.ForeignKey(User, related_name='smash_requests_sent', on_delete=models.CASCADE)
     receiver = models.ForeignKey(User, related_name='smash_requests_received', on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(default=timezone.now)
     accepted = models.BooleanField(default=False)
 
     def __str__(self):

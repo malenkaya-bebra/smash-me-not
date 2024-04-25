@@ -48,7 +48,7 @@ def register_view(request):
 
 def logout_view(request):
     auth.logout(request)
-    return redirect('/auth/login')
+    return redirect('/')
 
 
 def profile_edit(request):
